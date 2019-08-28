@@ -51,7 +51,6 @@ def create_parser_for_metagene_analysis():
 			help="Mode for filtering transcripts. Either 'counts' or 'RPKM'. default=%default.")
 	parser.add_option('-S','--select_trans_list',action="store",type='string',dest='in_selectTrans',
 			help="Selected transcript list used for metagene analysis.This files requires the first column must be the transcript ID  with a column name.")
-	## optional arguments
 	parser.add_option("-l","--minimum_cds_codon",action="store",type="int",default=150,dest="min_cds_codon",
 			help="Minimum CDS codon (codon unit). CDS codons smaller than \"minimum_cds_codon\" will be skipped. default=%default")
 	parser.add_option("-n","--minimum_cds_counts",action="store",type="int",default=128,dest="min_cds_counts",
@@ -93,6 +92,8 @@ def CI_for_t_distribution(data,confidence=0.95):
 
 def ribosomeDensityNormPerTrans(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoorDict,in_stopCodonCoorDict,inCDS_lengthFilterParma,inCDS_countsFilterParma,in_regionLengthParma,in_extendRegionLengthParma,in_excludeLengthParma,in_excludeCodonCountsParma,in_readLengths,in_readOffset,Mode,Unit,Type,confidence,norm):
 	pysamFile=pysam.AlignmentFile(in_bamFile,"rb")
+	pysamFile_trans=pysamFile.references
+	in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 	passTransSet=set()
 	startDensity=np.zeros(int(in_regionLengthParma+in_extendRegionLengthParma+1),dtype="float64")
 	stopDensity =np.zeros(int(in_regionLengthParma+in_extendRegionLengthParma+1),dtype="float64")

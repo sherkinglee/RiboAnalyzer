@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-16 15:09:23
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-19 14:11:23
+@LastEditTime: 2019-08-28 11:21:05
 @Description: The script is used for calculating ribosome density at each position along transcript and as well as "coverage" of each transcript.
 '''
 
@@ -42,6 +42,8 @@ def create_parser_for_riboDensity_atEachPosition():
 
 def ribosomeDensityAtEachPosition(in_bamFile,in_bamLegend,in_selectTrans,in_transLengthDict,in_startCodonCoorDict,in_stopCodonCoorDict,in_readLengths,in_readOffset,Unit,output_prefix):
 	pysamFile=pysam.AlignmentFile(in_bamFile,"rb")
+	pysamFile_trans=pysamFile.references
+	in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 	## codon unit
 	if Unit=="codon":
 		with open(output_prefix+"_"+in_bamLegend.strip()+"_cds_codon_density.txt",'w') as f1,open(output_prefix+"_"+in_bamLegend.strip()+"_cds_codon_coverage.txt",'w') as f2:

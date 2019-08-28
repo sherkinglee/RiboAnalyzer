@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-19 23:01:51
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-21 09:33:07
+@LastEditTime: 2019-08-26 20:38:45
 @Description: This script used for calculating ribosome density at each kind of amino acid or codon.
 And the ribosome density means counts/sequence_depth.
 input:
@@ -55,7 +55,7 @@ def creat_parser_for_calculation_of_codon_density():
 	parser.add_option('-S','--select_trans_list',action="store",type='string',dest='in_selectTrans',
 			help="Selected transcript list used for metagene analysis.This files requires the first column must be the transcript ID  with a column name.")
 
-	## optional arguments
+
 	parser.add_option("-l","--minimum_cds_codon",action="store",type="int",default=150,dest="min_cds_codon",
 			help="Minimum CDS codon (codon unit). CDS codons smaller than \"minimum_cds_codon\" will be skipped. default=%default")
 	parser.add_option("-n","--minimum_cds_counts",action="store",type="int",default=64,dest="min_cds_counts",
@@ -89,6 +89,8 @@ def codon_density(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoor
 		raise IOError("Please input the left position match with the right position!")
 	if (not left_pos) and (not right_pos):
 		pysamFile=pysam.AlignmentFile(in_bamFile,"rb")
+		pysamFile_trans=pysamFile.references
+		in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 		all_codon_density=defaultdict(list)
 		all_counts=0
 		for trans in in_selectTrans:
@@ -142,6 +144,8 @@ def codon_density(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoor
 		if right_pos <= left_pos:
 			raise IOError("The right position must be larger than the left position!")
 		pysamFile=pysam.AlignmentFile(in_bamFile,"rb")
+		pysamFile_trans=pysamFile.references
+		in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 		specific_range_codon_density = defaultdict(list)
 		the_rest_range_codon_density=defaultdict(list)
 		all_counts=0

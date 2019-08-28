@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-21 09:30:58
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-21 16:09:24
+@LastEditTime: 2019-08-26 20:36:38
 @Description: This script is used for calculating pusing score of each tri-AA motif.
 Because we want to see the differece among all samples, the transcripts used for pausing score analysis need to require all filtering conditions among all samples.
 input:
@@ -55,7 +55,6 @@ def create_parse_for_pausing_score_calculation():
 	parser.add_option('-S','--select_trans_list',action="store",type='string',dest='in_selectTrans',
 			help="Selected transcript list used for metagene analysis.This files requires the first column must be the transcript ID  with a column name.")
 
-	## optional arguments
 	parser.add_option("-l","--minimum_cds_codon",action="store",type="int",default=150,dest="min_cds_codon",
 			help="Minimum CDS codon (codon unit). CDS codons smaller than \"minimum_cds_codon\" will be skipped. default=%default")
 	parser.add_option("-n","--minimum_cds_counts",action="store",type="int",default=64,dest="min_cds_counts",
@@ -82,6 +81,8 @@ def pausing_score(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoor
 		raise IOError("Please input the left position match with the right position!")
 	transcript_sequence=fastaIter(transcriptFasta)
 	pysamFile=pysam.AlignmentFile(in_bamFile,'rb')
+	pysamFile_trans=pysamFile.references
+	in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 	fout=open(output_prefix+"_"+bamLegend+"_pausing_score.txt",'w+')
 	fout.write("%s\t%s" %("motif",bamLegend))
 	transcript_used=0
@@ -132,6 +133,8 @@ def filter_transcripts(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodo
 	'''
 	transcript_sequence=fastaIter(transcriptFasta)
 	pysamFile=pysam.AlignmentFile(in_bamFile,'rb')
+	pysamFile_trans=pysamFile.references
+	in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 	filter_1=0
 	filter_2=0
 	filter_3=0

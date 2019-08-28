@@ -4,10 +4,10 @@
 @Author: Li Fajin
 @Date: 2019-08-15 21:29:12
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-16 08:48:53
+@LastEditTime: 2019-08-26 20:37:02
 @Description: This script is used for checking periodicity of ribosome profiling data, but without P-site identification.
 And the part code are adapted from RiboCode our lab developed before. [Xiao, et al. NAR.2018]
-usage: python Periodicity -i bam -c longest.trans.info.txt -o outprefix -L 25 -R 35 -S select_trans.txt --id-type transcript-id
+usage: python Periodicity -i bam -c longest.trans.info.txt -o outprefix -L 25 -R 35 --id-type transcript-id
 '''
 
 
@@ -41,6 +41,8 @@ def create_parser_for_periodicity():
 
 def periodicity(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoorDict,in_stopCodonCoorDict,left_length,right_length):
 	pysamFile=pysam.AlignmentFile(in_bamFile,"rb")
+	pysamFile_trans=pysamFile.references
+	in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 	start_density=defaultdict(lambda:np.zeros(101,dtype="int64"))
 	stop_density=defaultdict(lambda:np.zeros(101,dtype="int64"))
 	total_reads=0

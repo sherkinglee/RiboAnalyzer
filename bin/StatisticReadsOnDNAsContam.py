@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-22 16:58:19
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-22 19:18:20
+@LastEditTime: 2019-08-22 22:24:31
 @Description: This script is used for statistic reads mapped to DNA  based on bam files mapped to transcriptome.
 Becaused the reads mapped to DNA may be contaminations. Code part from Xiao Zhengzao.
 '''

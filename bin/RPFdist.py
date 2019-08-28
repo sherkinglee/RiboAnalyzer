@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-18 21:19:13
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-19 14:11:54
+@LastEditTime: 2019-08-26 20:40:07
 @Description: This script is used for calculating RPFdist vaules of each transcript
 RPFdist=(read counts in 5UTR)/(read counts in CDS region) or
 RPFdist=(density in 5UTR)/(density in CDS region)
@@ -37,7 +37,7 @@ def create_parser_for_RPFdist():
 			help="Mode for filtering transcripts. Either 'counts' or 'RPKM'. default=%default.")
 	parser.add_option('-S','--select_trans_list',action="store",type='string',dest='in_selectTrans',
 			help="Selected transcript list used for metagene analysis.This files requires the first column must be the transcript ID  with a column name.")
-	## optional arguments
+
 	parser.add_option("-l","--minimum_cds_codon",action="store",type="int",default=150,dest="min_cds_codon",
 			help="Minimum CDS codon (codon unit). CDS codons smaller than \"minimum_cds_codon\" will be skipped. default=%default")
 	parser.add_option("-n","--minimum_cds_counts",action="store",type="int",default=128,dest="min_cds_counts",
@@ -53,6 +53,8 @@ def create_parser_for_RPFdist():
 def RPFdist(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoorDict,in_stopCodonCoorDict,inCDS_lengthFilterParma,inCDS_countsFilterParma,in_excludeLengthParma,in_excludeCodonCountsParma,in_readLengths,in_readOffset,Mode):
 
 	pysamFile=pysam.AlignmentFile(in_bamFile,"rb")
+	pysamFile_trans=pysamFile.references
+	in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 	all_counts=0
 	filter_1=0
 	filter_2=0

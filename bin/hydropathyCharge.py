@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-18 22:24:43
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-19 14:09:18
+@LastEditTime: 2019-08-23 11:18:35
 @Description: The script is used for hydropathy or charge calculaiton for a specific region
 input:
 1) cds sequences with fasta format you are interested in. Different fasta files would be separated by comma.
@@ -43,7 +43,6 @@ def create_parser_for_hydropathy_or_charge():
 			help="The legend of each fasta files, comma split. e.g. 'condition1,condition2,condition3' [required]")
 	parser.add_option("--index",action='store',type='string',dest='index',
 			help="Input the hydropathy index or charge index of each amino acids.")
-	## optional arguments
 	parser.add_option("-u","--upstream_codon",action="store",type="int",default=0,dest="upstream_codon",
 			help="Upstream codon corresponding to start codon (codon unit). While corresponding to stop codon, it is the downstream codon.")
 	parser.add_option("-d","--downstream_codon",action="store",type="int",default=500, dest="downstream_codon",

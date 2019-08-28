@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-12 17:52:34
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-22 20:46:57
+@LastEditTime: 2019-08-26 20:35:08
 @Description:
 	Containing some common functions used for other scripts:
 	1. bam_file_attr(): a class used for define attribution of bam files.
@@ -316,6 +316,8 @@ def get_trans_frame_counts(ribo_fileobj, transcript_name, read_lengths, read_off
 def RPKM_of_all_genes(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoorDict,in_stopCodonCoorDict,in_readLengths,in_readOffset,Type):
 	'''calculate the RPKM values for the CDS region or all transcript region'''
 	pysamFile=pysam.AlignmentFile(in_bamFile,'rb')
+	pysamFile_trans=pysamFile.references
+	in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 	# in_selectTrans=list(in_selectTrans)
 	RPKM={}
 	all_counts=0

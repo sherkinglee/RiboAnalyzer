@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-14 17:46:02
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-16 15:12:37
+@LastEditTime: 2019-08-26 20:37:33
 @Description: file content
 '''
 
@@ -56,6 +56,8 @@ def calculate_polarity(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodo
 		wi = (2*i-(len(gene)+1))/(len(gene)-1)
 	"""
 	pysamFile=pysam.AlignmentFile(in_bamFile,"rb")
+	pysamFile_trans=pysamFile.references
+	in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 	GeneNum = len(in_selectTrans)
 	polarityScore=[]
 	polarityScorePerTrans=[]

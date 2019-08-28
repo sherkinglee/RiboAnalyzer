@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-14 10:47:05
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-19 14:10:23
+@LastEditTime: 2019-08-26 20:35:57
 @Description:
 		This script is used for metagene analysis along the whole transcripts
 		usage: python MetageneAnalysisForTheWholeRegions.py -i 1.bam,2.bam -o test -c longest.trans.info.txt -r 28,29,30_27,28,29 -s 12,12,12_12,12,12 -t bamFile1,bamFile2 -b 15,90,60
@@ -56,7 +56,6 @@ def create_parser_for_metagene_analysis_for_the_whole_regions():
 			help="Bins to scale the transcript length.e.g.'15,90,60'. bins must be separated by comma, namely '5UTRBins,CDSBins,3UTRBins'. default=%default")
 	parser.add_option('-S','--select_trans_list',action="store",type='string',dest='in_selectTrans',
 			help="Selected transcript list used for metagene analysis.This files requires the first column must be the transcript ID  with a column name.")
-	## optional arguments
 	parser.add_option("-l","--minimum_cds_codon",action="store",type="int",default=150,dest="min_cds_codon",
 			help="Minimum CDS codon (codon unit). CDS codons smaller than \"minimum_cds_codon\" will be skipped. default=%default")
 	parser.add_option("-n","--minimum_cds_counts",action="store",type="int",default=128,dest="min_cds_counts",
@@ -112,6 +111,8 @@ def scale_transcripts_length(read_counts_vector,bin_number,Type=None):
 
 def NormedDensityCalculation(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoorDict,in_stopCodonCoorDict,inCDS_lengthFilterParma,inCDS_countsFilterParma,in_excludeLengthParma,in_excludeCodonCountsParma,in_readLengths,in_readOffset,Bins):
 	pysamFile=pysam.AlignmentFile(in_bamFile,"rb")
+	pysamFile_trans=pysamFile.references
+	in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
 	passTransSet=set()
 	Bins_vector=lengths_offsets_split(Bins)
 	final_density_vector=np.zeros(np.sum(Bins_vector),dtype="float64")
