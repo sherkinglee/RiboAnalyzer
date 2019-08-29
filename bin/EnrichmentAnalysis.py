@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-27 21:13:08
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-28 16:37:48
+@LastEditTime: 2019-08-29 11:14:25
 @Description: This script is used for calculating enrichment ratio and outputing files used for plot.
 
 '''
@@ -178,7 +178,7 @@ def enrichment_ratio(ctrl_dict,treat_dict,in_selectTrans,inCDS_lengthFilterParma
 		stopNormedWindowsList.append(tmpStopWin)
 		stopWindowsExistPosList.append(tmpStopPos)
 		passTransSet.add(trans)
-		ratio_dict[trans]=tmpStartWin
+		ratio_dict[trans]=ratio
 
 	startNormedWindowsList=np.array(startNormedWindowsList)
 	startWindowsExistPosList=np.array(startWindowsExistPosList)
