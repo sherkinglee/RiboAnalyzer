@@ -1,4 +1,16 @@
 ﻿# **RiboAnalyzer**
+
+<!-- TOC -->
++ [**RiboAnalyzer**](#riboanalyzer)
++ [**Introduction**](#introduction)
++ [**Data preparation**](#data-preparation)
++ [**Quality Control (QC)**](#quality-control-qc)
++ [**Metagene Analysis (MA)**](#metagene-analysis-ma)
++ [**Feature Analysis (FA)**](#feature-analysis-fa)
++ [**Enrichment Analysis (EA)**](#enrichment-analysis-ea)
+<!-- /TOC -->
+
+# **Introduction**
 The **RiboAnalyzer** is a python package used for downstream analysis of ribosome profiling data. This package has four function parts:
 
 + **Quality Control (QC)**: Quality control for ribosome profiling data, containing periodicity checking, reads distribution among different reading frames,length distribution of ribosome footprints and DNA contaminations.
@@ -55,7 +67,7 @@ Quality Control has some basic functions, containing periodicity checking, reads
     ./SRR5008136.bam    27,28,29    11,12,13    si-eIF5A-1
     ./SRR5008137.bam    27,28,29    11,12,13    si-eIF5A-2
     ```
-    The first column is the position and name of your bam files, the second column is the lengths of reads with good periodicity separated by comma, the third column is the off-set separated by comma and the last column is the names of bam file. Also, you could also use the *Periodicity* in this package to do the same thing but without statistics like this:
+    The first column is the position and name of your bam files, the second column is the lengths of reads with good periodicity separated by comma, the third column is the off-set separated by comma and the last column is the names of bam file. Also, you could also use the *Periodicity.py* in this package to do the same thing but without statistics like this:
 
     ```
     python Periodicity.py -i <transcript.bam> -o <output_prefix> -c <longest.transcripts.info.txt> -L 25 -R 35 {-S select_transcript.txt --id-type transcript-id}
@@ -111,7 +123,7 @@ There are lots of abnormal translation events such as ribosome stalling or ribos
     ```
     python PlotMetageneAnalysisForTheWholeRegions.py -i <output_prefix_scaled_density_dataframe.txt> -o <output_prefix> -g <group1,group2> -r <group1-rep1,group2-rep2__group2-rep1,group2-rep2> -b 15,90,60 --mode all {--ymin,--ymax}
     ```
-    where *-g* is the group names of samples or conditions which are separated by comma. It is recommmended that the first one is the control group and the next one is treat group. *-r* is the replicate names corresponding to the *-g*. Groups are separated by "__" and the replicates of one groups are separated by comma. *-b* must be the sample as *-b* in *MetageneAnalysisForTheWholeRegions.py*. *--mode* controls to output density plot of all samples or just mean density of different replicates.
+    where *-g* is the group names of samples or conditions which are separated by comma. It is recommmended that the first one is the control group and the next one is treat group. *-r* is the replicate names corresponding to the *-g* as well as *bamLegends* in *attributes.txt* file. Groups are separated by "__" and the replicates of one groups are separated by comma. *-b* must be the sample as *-b* in *MetageneAnalysisForTheWholeRegions.py*. *--mode* controls to output density plot of all samples or just mean density of different replicates.
 
 + **Metagene analysis on CDS regions.**
 
