@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-18 09:26:59
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-30 16:59:20
+@LastEditTime: 2019-09-01 16:00:39
 @Description: This file is used for local cAI and global cAI calculation of each gene
 
 Notes:
@@ -37,7 +37,7 @@ def calculate_geometric_mean(values):
 	length=len(values)
 	return pow(reduce(mul,values),1/length)
 
-def _synonymous_codons(genetic_code_dict):
+def synonymous_codons(genetic_code_dict):
 	''' code adapted from CAI'''
 
 	# invert the genetic code dictionary to map each amino acid to its codons
@@ -278,7 +278,7 @@ def write_cAI_per_codon(inFastaAttr,outFile):
 def main():
 	parser=create_parser_for_cAI()
 	(options,args)=parser.parse_args()
-	_synonymous_codons = {k: _synonymous_codons(v.forward_table) for k, v in ct.unambiguous_dna_by_id.items()}
+	_synonymous_codons = {k: synonymous_codons(v.forward_table) for k, v in ct.unambiguous_dna_by_id.items()}
 	_non_synonymous_codons = {k: {codon for codon in v.keys() if len(v[codon]) == 1}for k, v in _synonymous_codons.items()}
 	# validate user input
 	if sum([bool(options.reference), bool(options.RSCUs)], bool(options.weights)) != 1:
