@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-29 09:25:05
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-30 17:00:40
+@LastEditTime: 2019-09-01 19:01:08
 @Description: This script is used for plot of enrichment ratio for a single transcript
 usage: python EnrichmentAnalysisForSingleTrans.py -i <all_ratio.txt> -o <output_prefix> -c <coorFile> -s transcript_id --id-type transcript_id --unit codon [-S| --ymin|--ymax...]
 '''
@@ -113,37 +113,6 @@ def get_density_dict(densityFile):
 			density_dict[trans_id]=[float(i) for i in tmp[1:]]
 	return density_dict
 
-def reload_transcripts_information(longestTransFile):
-	selectTrans=set()
-	transLengthDict={}
-	cdsLengthDict={}
-	startCodonCoorDict={}
-	stopCodonCoorDict={}
-	transID2geneID={}
-	transID2geneName={}
-	with open(longestTransFile,'r') as f:
-		for line in f:
-			if line.strip()=='':
-				continue
-			if line.strip().split("\t")[0] == 'trans_id':
-				continue
-			transID=line.strip().split("\t")[0]
-			geneID=line.strip().split("\t")[2]
-			geneName=line.strip().split("\t")[3]
-			startCodon=int(line.strip().split("\t")[6])
-			stopCodon=int(line.strip().split("\t")[7])
-			cds_length=int(line.strip().split("\t")[8])
-			transLength=int(line.strip().split("\t")[11])
-			selectTrans.add(transID)
-			transLengthDict[transID]=transLength
-			startCodonCoorDict[transID]=startCodon
-			stopCodonCoorDict[transID]=stopCodon
-			transID2geneID[transID]=geneID
-			transID2geneName[transID]=geneName
-			cdsLengthDict[transID]=cds_length
-			# print(transID,geneID,geneName,startCodon,stopCodon,transLength)
-	print(str(len(selectTrans))+'  transcripts exist in your input file.\n', file=sys.stderr)
-	return selectTrans,transLengthDict,startCodonCoorDict,stopCodonCoorDict,transID2geneID,transID2geneName,cdsLengthDict
 
 def ID_transformation(transcript,coorFile,Type='singleTrans',id_type="transcript_id"):
 	transID2geneID,transID2geneName=reload_transcripts_information(coorFile)[4:6]
