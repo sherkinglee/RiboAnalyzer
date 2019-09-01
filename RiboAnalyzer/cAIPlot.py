@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-16 17:01:32
 @LastEditors: Li Fajin
-@LastEditTime: 2019-09-01 20:59:15
+@LastEditTime: 2019-09-01 21:42:17
 @Description: This script is used for cAI plot.
 '''
 
@@ -74,7 +74,7 @@ def plot_all_density(data,samples,type,in_regionLengthParma,in_extendRegionLengt
 		ax.spines["right"].set_visible(False)
 		ax.spines["bottom"].set_linewidth(2)
 		ax.spines["left"].set_linewidth(2)
-		ax.tick_params(which="both",width=2,labelsize=10)
+		ax.tick_params(which="both",width=2,labelsize=20)
 		if not ymin and not ymax:
 			pass
 		elif not ymin and ymax:
@@ -110,7 +110,7 @@ def plot_density_for_each_sample(data,samples,type,in_regionLengthParma,in_exten
 				ax.spines["right"].set_visible(False)
 				ax.spines["bottom"].set_linewidth(2)
 				ax.spines["left"].set_linewidth(2)
-				ax.tick_params(which="both",width=2,labelsize=10)
+				ax.tick_params(which="both",width=2,labelsize=20)
 				if not ymin and not ymax:
 					pass
 				elif not ymin and ymax:
@@ -137,7 +137,7 @@ def plot_density_for_each_sample(data,samples,type,in_regionLengthParma,in_exten
 				ax.spines["right"].set_visible(False)
 				ax.spines["bottom"].set_linewidth(2)
 				ax.spines["left"].set_linewidth(2)
-				ax.tick_params(which="both",width=2,labelsize=10)
+				ax.tick_params(which="both",width=2,labelsize=20)
 				if not ymin and not ymax:
 					pass
 				elif not ymin and ymax:
@@ -149,7 +149,7 @@ def plot_density_for_each_sample(data,samples,type,in_regionLengthParma,in_exten
 				else:
 					raise IOError("Please enter correct ymin and ymax parameters!")
 				plt.legend(loc="best",prop=legend_font)
-				plt.savefig(str(samples[i])+"_tIA_stop_codon"+"."+inOutFomat,format=inOutFomat)
+				plt.savefig(str(samples[i])+"_cAI_stop_codon"+"."+inOutFomat,format=inOutFomat)
 				plt.close()
 def slide_window_average(data,samples,in_regionLengthParma,in_extendRegionLengthParma,inOutPrefix,start,window,step):
 	start_average=[]
@@ -189,8 +189,8 @@ def main():
 		print("your input file is: "+str(data),file=sys.stderr)
 		data=pd.read_csv(data,sep="\t")
 		samples=np.unique(data.iloc[:,0])
-		text_font={"size":20,"family":"Arial","weight":"bold"}
-		legend_font={"size":20,"family":"Arial","weight":"bold"}
+		text_font={"size":30,"family":"Arial","weight":"bold"}
+		legend_font={"size":30,"family":"Arial","weight":"bold"}
 		data_average=slide_window_average(data,samples,in_regionLengthParma,in_extendRegionLengthParma,output_prefix,start,window,step)
 		if mode == 'all':
 			plot_all_density(data,samples,"start codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix,output_format,axvline,ymin,ymax,text_font=text_font,legend_font=legend_font)

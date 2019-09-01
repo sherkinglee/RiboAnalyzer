@@ -83,6 +83,7 @@ setup(
             'StatisticReadsOnDNAsContam=RiboAnalyzer.StatisticReadsOnDNAsContam:main',
             'tAI=RiboAnalyzer.tAI:main',
             'tAIPlot=RiboAnalyzer.tAIPlot:main',
+            'cAIPlot=RiboAnalyzer.cAIPlot:main',
         ],
 
     },

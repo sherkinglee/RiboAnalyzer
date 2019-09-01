@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-19 09:49:32
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-30 16:42:55
+@LastEditTime: 2019-09-01 21:39:40
 @Description: This script is used for hydropathy or charge plot
 '''
 
@@ -34,6 +34,9 @@ def create_parser_for_hydropathy_plot():
 	parser.add_option("--mode",action="store",type="string",dest="mode",default='all',help="Control the mode for plot.[all or single]. default=%default")
 	parser.add_option("--axvline",action="store",type="float",dest="axvline",default=None,help="Position to plot vetical line")
 	parser.add_option("--ylab",action="store",type="string",dest="ylab",default="Average Index",help="labels for y axis.'Average hydrophobicity' or 'Average charges'")
+	parser.add_option("--start",action="store",type="int",dest="start_position",default=5,help="The start position need to be averaged.default=%default")
+	parser.add_option("--window",action="store",type="int",dest="window",default=7,help="The length of silde window. ddefault=%default")
+	parser.add_option("--step",action="store",type='int',dest="step",default=1,help="The step length of slide window. default=%default")
 
 	return parser
 
@@ -69,7 +72,7 @@ def plot_all_density(data,samples,type,in_regionLengthParma,in_extendRegionLengt
 	ax.spines["right"].set_visible(False)
 	ax.spines["bottom"].set_linewidth(2)
 	ax.spines["left"].set_linewidth(2)
-	ax.tick_params(which="both",width=2)
+	ax.tick_params(which="both",width=2,labelsize=20)
 	if not ymin and not ymax:
 		pass
 	elif not ymin and ymax:
@@ -104,7 +107,7 @@ def plot_density_for_each_sample(data,samples,type,in_regionLengthParma,in_exten
 			ax.spines["right"].set_visible(False)
 			ax.spines["bottom"].set_linewidth(2)
 			ax.spines["left"].set_linewidth(2)
-			ax.tick_params(which="both",width=2,labelsize=10)
+			ax.tick_params(which="both",width=2,labelsize=20)
 			if not ymin and not ymax:
 				pass
 			elif not ymin and ymax:
@@ -131,7 +134,7 @@ def plot_density_for_each_sample(data,samples,type,in_regionLengthParma,in_exten
 			ax.spines["right"].set_visible(False)
 			ax.spines["bottom"].set_linewidth(2)
 			ax.spines["left"].set_linewidth(2)
-			ax.tick_params(which="both",width=2,labelsize=10)
+			ax.tick_params(which="both",width=2,labelsize=20)
 			if not ymin and not ymax:
 				pass
 			elif not ymin and ymax:
@@ -177,7 +180,7 @@ def plot_density_for_specific_region(data,samples,type,left_position,right_posit
 		ax.spines["right"].set_visible(False)
 		ax.spines["bottom"].set_linewidth(2)
 		ax.spines["left"].set_linewidth(2)
-		ax.tick_params(which="both",width=2)
+		ax.tick_params(which="both",width=2,labelsize=20)
 		if not ymin and not ymax:
 			pass
 		elif not ymin and ymax:
@@ -211,7 +214,7 @@ def plot_density_for_specific_region(data,samples,type,left_position,right_posit
 				ax.spines["right"].set_visible(False)
 				ax.spines["bottom"].set_linewidth(2)
 				ax.spines["left"].set_linewidth(2)
-				ax.tick_params(which="both",width=2,labelsize=10)
+				ax.tick_params(which="both",width=2,labelsize=20)
 				if not ymin and not ymax:
 					pass
 				elif not ymin and ymax:
@@ -242,7 +245,7 @@ def plot_density_for_specific_region(data,samples,type,left_position,right_posit
 				ax.spines["right"].set_visible(False)
 				ax.spines["bottom"].set_linewidth(2)
 				ax.spines["left"].set_linewidth(2)
-				ax.tick_params(which="both",width=2,labelsize=10)
+				ax.tick_params(which="both",width=2,labelsize=20)
 				if not ymin and not ymax:
 					pass
 				elif not ymin and ymax:
@@ -259,22 +262,53 @@ def plot_density_for_specific_region(data,samples,type,left_position,right_posit
 	else:
 		raise IOError("Please enter a correct --mode parameter![all or single]")
 
+def slide_window_average(data,samples,in_regionLengthParma,in_extendRegionLengthParma,inOutPrefix,start,window,step):
+	start_average=[]
+	stop_average=[]
+	label=[]
+	winLen=in_regionLengthParma+in_extendRegionLengthParma+1
+	for i in np.arange(len(samples)):
+			tmp1_data=np.zeros(winLen)
+			tmp1_data[0:int(start)]+=data.iloc[np.where(data.iloc[:,0]==samples[i])].iloc[:,1][0:int(start)]
+			tmp1_data[-int(start):]+=data.iloc[np.where(data.iloc[:,0]==samples[i])].iloc[:,1][-int(start):]
+			for j in np.arange(start,winLen-start,step):
+				tmp1_data[j]+=np.mean(data.iloc[np.where(data.iloc[:,0]==samples[i])].iloc[:,1][(j-int((window-1)/2)):(j+int((window-1)/2))])
+			start_average.extend(tmp1_data)
+			label.extend([samples[i]]*winLen)
 
+			tmp2_data=np.zeros(winLen)
+			tmp2_data[0:int(start)]+=data.iloc[np.where(data.iloc[:,0]==samples[i])].iloc[:,2][0:int(start)]
+			tmp2_data[-int(start):]+=data.iloc[np.where(data.iloc[:,0]==samples[i])].iloc[:,2][-int(start):]
+			for j in np.arange(start,winLen-start,step):
+				tmp2_data[j]+=np.mean(data.iloc[np.where(data.iloc[:,0]==samples[i])].iloc[:,2][(j-int((window-1)/2)):(j+int((window-1)/2))])
+			stop_average.extend(tmp2_data)
+
+	data_average=pd.DataFrame([label,start_average,stop_average],index=['sample','start_density','stop_density'])
+	data_average=data_average.T
+	data_average.to_csv(inOutPrefix+"_average_frame.txt",sep="\t",index=0)
+	return data_average
 def main():
 	parsed=create_parser_for_hydropathy_plot()
 	(options,args)=parsed.parse_args()
-	(inputFile,in_regionLengthParma,in_extendRegionLengthParma,output_prefix,output_format,ymin,ymax,left_position,right_position,axvline,mode,ylab)=(options.density_file,options.downstream_codon,options.upstream_codon,
-	options.output_prefix,options.output_format,options.ymin,options.ymax,options.left_position,options.right_position,options.axvline,options.mode,options.ylab)
+	(inputFile,in_regionLengthParma,in_extendRegionLengthParma,output_prefix,output_format,ymin,ymax,left_position,right_position,axvline,mode,ylab,start,window,step)=(options.density_file,options.downstream_codon,options.upstream_codon,
+	options.output_prefix,options.output_format,options.ymin,options.ymax,options.left_position,options.right_position,options.axvline,options.mode,options.ylab,options.start_position,options.window,options.step)
+	if window%2 == 0:
+		raise IOError("Please reset your --window parameter. It must be a odd number.")
+	if (start-1) < (window-1)/2:
+		raise IOError("Please reset your --step and --window parameters. The (window-1)/2 must be less than start-1")
 	data=pd.read_csv(inputFile,sep="\t")
 	samples=np.unique(data.iloc[:,0])
-	text_font={"size":20,"family":"Arial","weight":"bold"}
-	legend_font={"size":20,"family":"Arial","weight":"bold"}
+	text_font={"size":30,"family":"Arial","weight":"bold"}
+	legend_font={"size":30,"family":"Arial","weight":"bold"}
+	data_average=slide_window_average(data,samples,in_regionLengthParma,in_extendRegionLengthParma,output_prefix,start,window,step)
 	if mode == 'all':
 		if (not left_position and right_position) or (left_position and not right_position):
 			raise IOError("Do you want to plot in a specific region? Input both the left and right position please!")
 		elif ((not left_position) and (not right_position)):
 			plot_all_density(data,samples,"start codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix,output_format,ymin,ymax,axvline,ylab=ylab,text_font=text_font,legend_font=legend_font)
 			plot_all_density(data,samples,"stop codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix,output_format,ymin,ymax,axvline,ylab=ylab,text_font=text_font,legend_font=legend_font)
+			plot_all_density(data_average,samples,"start codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix+"__average",output_format,ymin,ymax,axvline,ylab=ylab,text_font=text_font,legend_font=legend_font)
+			plot_all_density(data_average,samples,"stop codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix+"__average",output_format,ymin,ymax,axvline,ylab=ylab,text_font=text_font,legend_font=legend_font)
 			print("finished plot the hydropathy or charge density",file=sys.stderr)
 		else:
 			if left_position>=right_position:
@@ -283,6 +317,8 @@ def main():
 				raise IOError("The right position is out of region. Please reset your -r parameer!")
 			plot_density_for_specific_region(data,samples,"start codon",left_position,right_position,output_prefix,output_format,ymin,ymax,axvline,mode,ylab=ylab,text_font=text_font,legend_font=legend_font)
 			plot_density_for_specific_region(data,samples,"stop codon",left_position,right_position,output_prefix,output_format,ymin,ymax,axvline,mode,ylab=ylab,text_font=text_font,legend_font=legend_font)
+			plot_density_for_specific_region(data_average,samples,"start codon",left_position,right_position,output_prefix+"__average",output_format,ymin,ymax,axvline,mode,ylab=ylab,text_font=text_font,legend_font=legend_font)
+			plot_density_for_specific_region(data_average,samples,"stop codon",left_position,right_position,output_prefix+"__average",output_format,ymin,ymax,axvline,mode,ylab=ylab,text_font=text_font,legend_font=legend_font)
 			print("finished plot the hydropathy or charge density",file=sys.stderr)
 	elif mode == 'single':
 		if (not left_position and right_position) or (left_position and not right_position):
