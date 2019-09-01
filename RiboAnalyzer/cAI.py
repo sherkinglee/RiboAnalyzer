@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-18 09:26:59
 @LastEditors: Li Fajin
-@LastEditTime: 2019-09-01 16:00:39
+@LastEditTime: 2019-09-01 16:36:52
 @Description: This file is used for local cAI and global cAI calculation of each gene
 
 Notes:
@@ -52,7 +52,7 @@ def synonymous_codons(genetic_code_dict):
 		for codon in genetic_code_dict.keys()
 	}
 
-def RSCU(sequences, genetic_code=1):
+def RSCU(sequences, synonymousCodonsDict,genetic_code=1):
 	''' code adapted from CAI'''
 	if not isinstance(sequences, (list, tuple)):
 		raise ValueError(
@@ -83,7 +83,7 @@ def RSCU(sequences, genetic_code=1):
 			counts[codon] = 0.5
 
 	# determine the synonymous codons for the genetic code
-	synonymous_codons = _synonymous_codons[genetic_code]
+	synonymousCodons = synonymousCodonsDict[genetic_code]
 
 	# hold the result as it is being calulated
 	result = {}
@@ -91,15 +91,15 @@ def RSCU(sequences, genetic_code=1):
 	# calculate RSCU values
 	for codon in ct.unambiguous_dna_by_id[genetic_code].forward_table:
 		result[codon] = counts[codon] / (
-			(len(synonymous_codons[codon]) ** -1)
-			* (sum((counts[_codon] for _codon in synonymous_codons[codon])))
+			(len(synonymousCodons[codon]) ** -1)
+			* (sum((counts[_codon] for _codon in synonymousCodons[codon])))
 		)
 
 
 	return result
 
 
-def relative_adaptiveness(sequences=None, RSCUs=None, genetic_code=1):
+def relative_adaptiveness(synonymousCodonsDict,sequences=None, RSCUs=None, genetic_code=1):
 	''' code adapted from CAI'''
 
 	# ensure user gave only and only one input
@@ -108,22 +108,22 @@ def relative_adaptiveness(sequences=None, RSCUs=None, genetic_code=1):
 
 	# calculate the RSCUs if only given sequences
 	if sequences:
-		RSCUs = RSCU(sequences, genetic_code=genetic_code)
+		RSCUs = RSCU(sequences, synonymousCodonsDict,genetic_code=genetic_code)
 
 	# determine the synonymous codons for the genetic code
-	synonymous_codons = _synonymous_codons[genetic_code]
+	synonymousCodons = synonymousCodonsDict[genetic_code]
 
 	# calculate the weights
 	weight = {}
 	for codon in RSCUs:
 		weight[codon] = RSCUs[codon] / max(
-			(RSCUs[_codon] for _codon in synonymous_codons[codon])
+			(RSCUs[_codon] for _codon in synonymousCodons[codon])
 		)
 	for stopCodon in ['TAG','TGA','TAA']:
 		weight[stopCodon]=0
 	return weight
 
-def CAI_of_each_trans(sequence, weights=None, RSCUs=None, reference=None, genetic_code=1):
+def CAI_of_each_trans(sequence, synonymousCodonsDict,non_synonymous_codons,weights=None, RSCUs=None, reference=None, genetic_code=1):
 	''' codes adapted from CAI'''
 	# validate user input
 	if sum([bool(reference), bool(RSCUs)], bool(weights)) != 1:
@@ -143,12 +143,12 @@ def CAI_of_each_trans(sequence, weights=None, RSCUs=None, reference=None, geneti
 
 	# generate weights if not given
 	if reference:
-		weights = relative_adaptiveness(sequences=reference, genetic_code=genetic_code)
+		weights = relative_adaptiveness(synonymousCodonsDict,sequences=reference, genetic_code=genetic_code)
 	elif RSCUs:
-		weights = relative_adaptiveness(RSCUs=RSCUs, genetic_code=genetic_code)
+		weights = relative_adaptiveness(synonymousCodonsDict,RSCUs=RSCUs, genetic_code=genetic_code)
 	sequence_weights = []
 	for codon in sequence:
-		if codon not in _non_synonymous_codons[genetic_code]:
+		if codon not in non_synonymous_codons[genetic_code]:
 			try:
 				sequence_weights.append(weights[codon])
 			except KeyError:
@@ -163,12 +163,12 @@ def CAI_of_each_trans(sequence, weights=None, RSCUs=None, reference=None, geneti
 					)
 	return float(calculate_geometric_mean(sequence_weights))
 
-def global_cAI(sequenceDict,weights=None, RSCUs=None, reference=None, genetic_code=1):
+def global_cAI(sequenceDict,synonymousCodonsDict,non_synonymous_codons,weights=None, RSCUs=None, reference=None, genetic_code=1):
 	'''calculate global CAI'''
 	cAI={}
 	for trans in sequenceDict.keys():
 		cds_seq=sequenceDict[trans][:-3] ## excluding stop codon
-		cAI[trans]=CAI_of_each_trans(cds_seq, weights=weights, RSCUs=RSCUs, reference=reference, genetic_code=genetic_code)
+		cAI[trans]=CAI_of_each_trans(cds_seq, synonymousCodonsDict,non_synonymous_codons,weights=weights, RSCUs=RSCUs, reference=reference, genetic_code=genetic_code)
 	return cAI
 
 
@@ -278,8 +278,8 @@ def write_cAI_per_codon(inFastaAttr,outFile):
 def main():
 	parser=create_parser_for_cAI()
 	(options,args)=parser.parse_args()
-	_synonymous_codons = {k: synonymous_codons(v.forward_table) for k, v in ct.unambiguous_dna_by_id.items()}
-	_non_synonymous_codons = {k: {codon for codon in v.keys() if len(v[codon]) == 1}for k, v in _synonymous_codons.items()}
+	synonymousCodonsDict = {k: synonymous_codons(v.forward_table) for k, v in ct.unambiguous_dna_by_id.items()}
+	non_synonymous_codons = {k: {codon for codon in v.keys() if len(v[codon]) == 1}for k, v in synonymousCodonsDict.items()}
 	# validate user input
 	if sum([bool(options.reference), bool(options.RSCUs)], bool(options.weights)) != 1:
 		raise TypeError(
@@ -301,28 +301,28 @@ def main():
 	if references:
 		referenceDict=fastaIter(references)
 		references=list(referenceDict.values())
-		RSCUs=RSCU(references,genetic_code=options.genetic_table)
-		weights = relative_adaptiveness(RSCUs=RSCUs, genetic_code=options.genetic_table)
+		RSCUs=RSCU(references,synonymousCodonsDict,genetic_code=options.genetic_table)
+		weights = relative_adaptiveness(synonymousCodonsDict,RSCUs=RSCUs, genetic_code=options.genetic_table)
 		write_weight_file(weights,options.output_prefix+"_weights_for_cAI.txt")
 		write_weight_file(RSCUs,options.output_prefix+"_RSCUs_for_cAI.txt")
 		for fasta in fasta_attr:
 			sequenceDict=fastaIter(fasta.fastaName)
 			(fasta.startcAI,fasta.stopcAI,fasta.cAIPerCodon) = get_trans_frame_cAI(sequenceDict,options.upstream_codon,options.downstream_codon,weights,table=options.genetic_table)
-			fasta.cAI=global_cAI(sequenceDict,weights=weights,genetic_code=options.genetic_table)
+			fasta.cAI=global_cAI(sequenceDict,synonymousCodonsDict,non_synonymous_codons,weights=weights,genetic_code=options.genetic_table)
 	elif RSCUs:
 		RSCUs=parse_weight_file(RSCUs)
-		weights = relative_adaptiveness(RSCUs=RSCUs, genetic_code=options.genetic_table)
+		weights = relative_adaptiveness(synonymousCodonsDict,RSCUs=RSCUs, genetic_code=options.genetic_table)
 		write_weight_file(weights,options.output_prefix+"_weights_for_cAI.txt")
 		for fasta in fasta_attr:
 			sequenceDict=fastaIter(fasta.fastaName)
 			(fasta.startcAI,fasta.stopcAI,fasta.cAIPerCodon) = get_trans_frame_cAI(sequenceDict,options.upstream_codon,options.downstream_codon,weights,table=options.genetic_table)
-			fasta.cAI=global_cAI(sequenceDict,RSCUs=RSCUs,genetic_code=options.genetic_table)
+			fasta.cAI=global_cAI(sequenceDict,synonymousCodonsDict,non_synonymous_codons,RSCUs=RSCUs,genetic_code=options.genetic_table)
 	elif weights:
 		weights=parse_weight_file(weights)
 		for fasta in fasta_attr:
 			sequenceDict=fastaIter(fasta.fastaName)
 			(fasta.startcAI,fasta.stopcAI,fasta.cAIPerCodon) = get_trans_frame_cAI(sequenceDict,options.upstream_codon,options.downstream_codon,weights,table=options.genetic_table)
-			fasta.cAI=global_cAI(sequenceDict,weights=weights,genetic_code=options.genetic_table)
+			fasta.cAI=global_cAI(sequenceDict,synonymousCodonsDict,non_synonymous_codons,weights=weights,genetic_code=options.genetic_table)
 	else:
 		raise IOError("Please enter a correct input. Must provide either reference sequences, or RSCU dictionary, or weights")
 
