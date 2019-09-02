@@ -1,4 +1,3 @@
-﻿tags: Python Ribosome-profiling
 # **RiboAnalyzer: a python package for downstream analysis of ribosome profiling data**
 <!-- TOC -->
 + [**Introduction**](#introduction)
@@ -420,33 +419,32 @@ EnrichmentAnalysisForSingleTrans -i all_codon_ratio.txt.txt -s ARC1 -o ARC1 -c <
 **Figure 6: The results of Enrichment Analysis**. **A.** Engagement of nascent ARC1 (top), GUS1 (bottom) by C-terminally tagged MetRS.  **B.** Engagement of nascent ARC1 (top), MES1 (bottom) by C-terminally tagged GluRS.
 
 
-  [1]: http://static.zybuluo.com/sherking/yh0vaumck7sa4fb6du7ss4tq/QC.png
-  [2]: http://static.zybuluo.com/sherking/yh0vaumck7sa4fb6du7ss4tq/QC.png
-  [3]: http://static.zybuluo.com/sherking/yh0vaumck7sa4fb6du7ss4tq/QC.png
-  [4]: http://static.zybuluo.com/sherking/yh0vaumck7sa4fb6du7ss4tq/QC.png
-  [5]: http://static.zybuluo.com/sherking/yh0vaumck7sa4fb6du7ss4tq/QC.png
-  [6]: http://static.zybuluo.com/sherking/yh0vaumck7sa4fb6du7ss4tq/QC.png
-  [7]: http://static.zybuluo.com/sherking/yh0vaumck7sa4fb6du7ss4tq/QC.png
-  [8]: http://static.zybuluo.com/sherking/wmrbd59s4v0jg7kqo123kypq/MA.png
-  [9]: http://static.zybuluo.com/sherking/wmrbd59s4v0jg7kqo123kypq/MA.png
-  [10]: http://static.zybuluo.com/sherking/wmrbd59s4v0jg7kqo123kypq/MA.png
-  [11]: http://static.zybuluo.com/sherking/wmrbd59s4v0jg7kqo123kypq/MA.png
-  [12]: http://static.zybuluo.com/sherking/wmrbd59s4v0jg7kqo123kypq/MA.png
-  [13]: http://static.zybuluo.com/sherking/wmrbd59s4v0jg7kqo123kypq/MA.png
-  [14]: http://static.zybuluo.com/sherking/8mo4nfikt69i86271n03krhj/AADensity.png
-  [15]: http://static.zybuluo.com/sherking/8mo4nfikt69i86271n03krhj/AADensity.png
-  [16]: http://static.zybuluo.com/sherking/8mo4nfikt69i86271n03krhj/AADensity.png
-  [17]: http://static.zybuluo.com/sherking/8mo4nfikt69i86271n03krhj/AADensity.png
-  [18]: http://static.zybuluo.com/sherking/8mo4nfikt69i86271n03krhj/AADensity.png
-  [19]: http://static.zybuluo.com/sherking/8mo4nfikt69i86271n03krhj/AADensity.png
-  [20]: http://static.zybuluo.com/sherking/8mo4nfikt69i86271n03krhj/AADensity.png
-  [21]: http://static.zybuluo.com/sherking/pj876f7h062ibtbe898c8x8c/triAADensity.png
-  [22]: http://static.zybuluo.com/sherking/pj876f7h062ibtbe898c8x8c/triAADensity.png
-  [23]: http://static.zybuluo.com/sherking/pj876f7h062ibtbe898c8x8c/triAADensity.png
-  [24]: http://static.zybuluo.com/sherking/pj876f7h062ibtbe898c8x8c/triAADensity.png
-  [25]: http://static.zybuluo.com/sherking/lx9iitd0d9t8wvqyfvguny5d/CAItAI.png
-  [26]: http://static.zybuluo.com/sherking/lx9iitd0d9t8wvqyfvguny5d/CAItAI.png
-  [27]: http://static.zybuluo.com/sherking/lx9iitd0d9t8wvqyfvguny5d/CAItAI.png
-  [28]: http://static.zybuluo.com/sherking/pj876f7h062ibtbe898c8x8c/triAADensity.png
-  [29]: http://static.zybuluo.com/sherking/lx9iitd0d9t8wvqyfvguny5d/CAItAI.png
-  [30]: http://static.zybuluo.com/sherking/l3mknu8dl13zllber9w7m237/EA.png
+  [1]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/QC.png
+  [2]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/QC.png
+  [3]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/QC.png
+  [4]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/QC.png
+  [5]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/QC.png
+  [6]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/QC.png
+  [7]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/QC.png
+  [8]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/MA.png
+  [10]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/MA.png
+  [11]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/MA.png
+  [12]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/MA.png
+  [13]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/MA.png
+  [14]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/AADensity.png
+  [15]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/AADensity.png
+  [16]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/AADensity.png
+  [17]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/AADensity.png
+  [18]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/AADensity.png
+  [19]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/AADensity.png
+  [20]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/AADensity.png
+  [21]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/triAADensity.png
+  [22]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/triAADensity.png
+  [23]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/triAADensity.png
+  [24]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/triAADensity.png
+  [25]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/CAItAI.png
+  [26]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/CAItAI.png
+  [27]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/CAItAI.png
+  [28]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/triAADensity.png
+  [29]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/CAItAI.png
+  [30]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/EA.png
