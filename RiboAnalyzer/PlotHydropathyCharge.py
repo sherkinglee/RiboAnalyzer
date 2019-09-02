@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-19 09:49:32
 @LastEditors: Li Fajin
-@LastEditTime: 2019-09-01 21:39:40
+@LastEditTime: 2019-09-01 21:51:34
 @Description: This script is used for hydropathy or charge plot
 '''
 
@@ -307,8 +307,8 @@ def main():
 		elif ((not left_position) and (not right_position)):
 			plot_all_density(data,samples,"start codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix,output_format,ymin,ymax,axvline,ylab=ylab,text_font=text_font,legend_font=legend_font)
 			plot_all_density(data,samples,"stop codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix,output_format,ymin,ymax,axvline,ylab=ylab,text_font=text_font,legend_font=legend_font)
-			plot_all_density(data_average,samples,"start codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix+"__average",output_format,ymin,ymax,axvline,ylab=ylab,text_font=text_font,legend_font=legend_font)
-			plot_all_density(data_average,samples,"stop codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix+"__average",output_format,ymin,ymax,axvline,ylab=ylab,text_font=text_font,legend_font=legend_font)
+			plot_all_density(data_average,samples,"start codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix+"_average",output_format,ymin,ymax,axvline,ylab=ylab,text_font=text_font,legend_font=legend_font)
+			plot_all_density(data_average,samples,"stop codon",in_regionLengthParma,in_extendRegionLengthParma,output_prefix+"_average",output_format,ymin,ymax,axvline,ylab=ylab,text_font=text_font,legend_font=legend_font)
 			print("finished plot the hydropathy or charge density",file=sys.stderr)
 		else:
 			if left_position>=right_position:
@@ -317,8 +317,8 @@ def main():
 				raise IOError("The right position is out of region. Please reset your -r parameer!")
 			plot_density_for_specific_region(data,samples,"start codon",left_position,right_position,output_prefix,output_format,ymin,ymax,axvline,mode,ylab=ylab,text_font=text_font,legend_font=legend_font)
 			plot_density_for_specific_region(data,samples,"stop codon",left_position,right_position,output_prefix,output_format,ymin,ymax,axvline,mode,ylab=ylab,text_font=text_font,legend_font=legend_font)
-			plot_density_for_specific_region(data_average,samples,"start codon",left_position,right_position,output_prefix+"__average",output_format,ymin,ymax,axvline,mode,ylab=ylab,text_font=text_font,legend_font=legend_font)
-			plot_density_for_specific_region(data_average,samples,"stop codon",left_position,right_position,output_prefix+"__average",output_format,ymin,ymax,axvline,mode,ylab=ylab,text_font=text_font,legend_font=legend_font)
+			plot_density_for_specific_region(data_average,samples,"start codon",left_position,right_position,output_prefix+"_average",output_format,ymin,ymax,axvline,mode,ylab=ylab,text_font=text_font,legend_font=legend_font)
+			plot_density_for_specific_region(data_average,samples,"stop codon",left_position,right_position,output_prefix+"_average",output_format,ymin,ymax,axvline,mode,ylab=ylab,text_font=text_font,legend_font=legend_font)
 			print("finished plot the hydropathy or charge density",file=sys.stderr)
 	elif mode == 'single':
 		if (not left_position and right_position) or (left_position and not right_position):
