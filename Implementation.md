@@ -427,6 +427,7 @@ EnrichmentAnalysisForSingleTrans -i all_codon_ratio.txt.txt -s ARC1 -o ARC1 -c <
   [6]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/QC.png
   [7]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/QC.png
   [8]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/MA.png
+  [9]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/MA.png
   [10]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/MA.png
   [11]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/MA.png
   [12]: https://github.com/sherkinglee/RiboAnalyzer/blob/master/data/MA.png
