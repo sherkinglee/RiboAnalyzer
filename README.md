@@ -139,9 +139,9 @@ where *sequence_sample.fastq* is the fastq file after adapter trimmed and filter
 Sometimes the length distribution of ribosome footprint is biased away from 28nt-30nt, which is the normal length distribution of ribosome profiling data. Therefore, this step aims to statistic numbers of the reads mapped to RNA, DNA, Intron region,and re-check the length distriution of reads mapped to transcriptome.
 
 ```
-StatisticReadsOnDNAsContam -i  <transcriptome.bam>  -g <gtfFile.gtf>  -o  <output_prefix>
+StatisticReadsOnDNAsContam -i  <genome.bam>  -g <gtfFile.gtf>  -o  <output_prefix>
 ```
-where *transcriptome.bam* is bam file mapped to transcriptome, *gtfFile.gtf* is the genome annotation file such as *Homo_sapiens.GRCh38.88.gtf*. This step would generated four files, one is the reads distribution of mapped reads <*output_prefix_reads_distribution.txt*>, like this:
+where *genome.bam* is bam file mapped to genome, *gtfFile.gtf* is the genome annotation file such as *Homo_sapiens.GRCh38.88.gtf*. This step would generated four files, one is the reads distribution of mapped reads <*output_prefix_reads_distribution.txt*>, like this:
 ```
 unique mapped reads of RNA: 30776678
 unique mapped reads of DNA: 48395

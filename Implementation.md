@@ -1,4 +1,5 @@
-﻿# **RiboAnalyzer: a python package for downstream analysis of ribosome profiling data**
+﻿tags: RiboAnalyzer-Implementation
+# **RiboAnalyzer: a python package for downstream analysis of ribosome profiling data**
 ---
 <!-- TOC -->
 
@@ -110,7 +111,8 @@ STAR --runThreadN 8 --outFilterType Normal --outWigType wiggle --outWigStrand St
 ## sort
 samtools sort -T $workdir/${i}_STAR/$i.Aligned.toTranscriptome.out.sorted -o $workdir/${i}_STAR/$i.Aligned.toTranscriptome.out.sorted.bam $workdir/${i}_STAR/$i.Aligned.toTranscriptome.out.bam
 ## index
-samtools index  $workdir/${i}_STAR/$i.Aligned.toTranscriptome.out.sorted.bam
+samtools index  $workdir/${i}_STAR/$i.Aligned.toTranscriptome.out.sorted.bam ## mapped to transcriptome
+samtools index $workdir/${i}_STAR/$i.Aligned.sortedByCoord.out.bam ## mapped to genome
 ```
 
 # **RiboAnalyzer**
