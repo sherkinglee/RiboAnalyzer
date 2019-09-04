@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-22 11:42:42
 @LastEditors: Li Fajin
-@LastEditTime: 2019-09-04 20:26:44
+@LastEditTime: 2019-09-04 20:53:15
 @Description: This script is used for statistic the length distribution of sequence reads based on a fastq file.
 '''
 
@@ -83,8 +83,8 @@ def plot_reads_length(lengths_dict,output_prefix,text_font={"size":20,"family":"
 	ax.spines["left"].set_linewidth(2)
 	ax.set_xlabel("Length of reads",fontdict=text_font)
 	ax.set_ylabel("Read Counts",fontdict=text_font)
-	ax.set_xticks(np.arange(0,50,5))
-	ax.set_xticklabels((np.arange(0,50,5)))
+	# ax.set_xticks(np.arange(0,50,5))
+	# ax.set_xticklabels((np.arange(0,50,5)))
 	ax.tick_params(which="both",width=2,labelsize=10)
 	plt.tight_layout()
 	plt.savefig(output_prefix+"_reads_length.pdf")
