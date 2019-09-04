@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-22 11:42:42
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-30 17:03:30
+@LastEditTime: 2019-09-04 20:26:44
 @Description: This script is used for statistic the length distribution of sequence reads based on a fastq file.
 '''
 
@@ -35,7 +35,7 @@ def fq2seqDict(fqFile):
 	'''
 	fastaDict={}
 	f=open(fqFile,'r')
-	faiter=(x[1] for x in groupby(f,lambda line: line.strip()[0]=="@")) ## groupby returns a tuple (key, group)
+	faiter=(x[1] for x in groupby(f,lambda line: line[0]=="@")) ## groupby returns a tuple (key, group)
 	for header in faiter:
 		read_name=header.__next__().strip("@").split(" ")[0]
 		seq='\t'.join(s.strip() for s in faiter.__next__()).strip().split("\t")[0]
