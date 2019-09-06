@@ -43,18 +43,29 @@ The **RiboAnalyzer** is a python package used for downstream analysis of ribosom
 
 # **Installation**
 
-RiboCode can be installed like any other Python packages. Here are some popular ways:
+**[RiboAnalyzer](https://github.com/sherkinglee/RiboAnalyzer)** can be installed like any other Python packages. Here are some popular ways:
 
 + Install via pypi:
 ```
-pip install RiboAnalyzer
+pip install RiboAnalyzer or
+pip install RiboAnalyzer==0.1
 ```
 + Install from source:
-```
-git clone https://github.com/sherkinglee/RiboAnalyzer.git
-cd RiboAnalyzer
-python setup.py install
-```
+
+    + source from [github](https://github.com/sherkinglee/RiboAnalyzer)
+    ```
+    git clone https://github.com/sherkinglee/RiboAnalyzer.git
+    cd RiboAnalyzer
+    python setup.py install
+    ```
+    
+    + source from [pypi](https://pypi.org/project/RiboAnalyzer/)
+    ```
+    wget -c https://files.pythonhosted.org/packages/2f/65/3b1aa0cf11238e2185ef3a17cd32a858db5dc5374d030fa91240d56f9f8f/RiboAnalyzer-0.1.tar.gz
+    cd RiboAnalyzer-0.1
+    python setup.py install
+    ```
+
 # **Usage**
 
 ## **Data preparation**
@@ -84,7 +95,7 @@ This step would generated two files, one is the *longest.transcripts.info.txt*, 
 GetProteinCodingSequence -i <transcripts_sequence.fa>  -c <longest.transcripts.info.txt> -o <output_prefix> --mode whole --table 1 {-l -r -S}
 ```
 This step would generate three files. One is the amino acid sequences of the longest transcripts. One is the transcript sequences of the longest transcripts. And the last one is the cds sequences of the longest transcripts. *transcripts_sequence.fa* and *longest.transcripts.info.txt* are generated above. *--table* controls which genetic code we should use, default is the standard. If you want to get sequences of a specific gene set, please reset *-S* parameter.
-    
+
 Sometines, UTR sequences are needed. In this case, *GetUTRSequences* maybe helpful:
 ```
 GetUTRSequences -i <input_transcript_sequences.fa> -o <output_prefix> -c <transcripts_cds.txt>
@@ -309,7 +320,7 @@ Seq2Logo.py -f <pwm.txt> -u probability -I 5 -o <output_preifx> --format PDF
     ```
 
     + **As for a tri-AA motifs list which contains part of information like this**:
-    
+
     ```
     motifs
     PPP
@@ -344,7 +355,7 @@ PlotGCContent -i <output_prefix_GC_content.txt> -o <output_prefix> --mode normal
 ## frames mode
 PlotGCContent -i <output_prefix_GC_content_frames.txt> -o <output_prefix> --mode frames
 ```
-    
+
 + **Local tRNA adaptation index and tRNA adaptation index**
 
 This step would generate two file. One is the file containing the local tAI values at each positon along transcripts and the other contains the global tAI values.
