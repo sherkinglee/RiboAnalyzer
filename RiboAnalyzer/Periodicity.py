@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-15 21:29:12
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-30 17:05:47
+@LastEditTime: 2019-09-08 22:04:39
 @Description: This script is used for checking periodicity of ribosome profiling data, but without P-site identification.
 And the part code are adapted from RiboCode our lab developed before. [Xiao, et al. NAR.2018]
 usage: python Periodicity -i bam -c longest.trans.info.txt -o outprefix -L 25 -R 35 --id-type transcript-id
@@ -13,6 +13,7 @@ usage: python Periodicity -i bam -c longest.trans.info.txt -o outprefix -L 25 -R
 
 from .FunctionDefinition import *
 from functools import reduce
+import pickle
 from collections import defaultdict
 import matplotlib
 matplotlib.use('Agg')
@@ -21,7 +22,17 @@ from matplotlib.backends.backend_pdf import PdfPages
 from optparse import OptionParser
 
 
-def periodicity(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoorDict,in_stopCodonCoorDict,left_length,right_length):
+def load_transcripts_pickle(pickle_file):
+	if os.path.exists(pickle_file):
+		sys.stdout.write("\tLoading transcripts.pickle ...\n")
+		with open(pickle_file,"rb") as fin:
+			gene_dict, transcript_dict = pickle.load(fin)
+	else:
+		raise IOError("\tError, %s file not found\n" % pickle_file)
+
+	return gene_dict,transcript_dict
+
+def periodicity(in_bamFile,in_selectTrans,transcript_dict,left_length,right_length):
 	pysamFile=pysam.AlignmentFile(in_bamFile,"rb")
 	pysamFile_trans=pysamFile.references
 	in_selectTrans=set(pysamFile_trans).intersection(in_selectTrans)
@@ -32,17 +43,16 @@ def periodicity(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoorDi
 	i=0
 	for trans in in_selectTrans:
 		i+=1
-		leftCoor =int(in_startCodonCoorDict[trans])-1 #the first base of start codon 0-base
-		rightCoor=int(in_stopCodonCoorDict[trans])-3 #the first base of stop codon 0-base
-		# print(trans)
 		for record in pysamFile.fetch(trans):
 			if record.flag == 16 or record.flag == 272:
 				continue
 			total_reads += 1
 			specific_counts[record.query_length]+=1
+			if trans not in transcript_dict.keys():
+				continue
 			if left_length<=record.query_length<=right_length:
-				distance_to_start=record.reference_start-leftCoor
-				dsitance_to_stop=record.reference_start-rightCoor+3
+				distance_to_start=record.reference_start-transcript_dict[trans].startcodon.start
+				dsitance_to_stop=record.reference_start-transcript_dict[trans].stopcodon.end
 				if abs(distance_to_start)<=50:
 					start_density[record.query_length][50+distance_to_start]+=1
 				if abs(dsitance_to_stop) <= 50:
@@ -52,15 +62,8 @@ def periodicity(in_bamFile,in_selectTrans,in_transLengthDict,in_startCodonCoorDi
 	print("There are " + str(i)+" used for statistics.",file=sys.stderr)
 	return start_density,stop_density,total_reads,specific_counts
 
-def flatten(xs):
-	for x in xs:
-		if isinstance(x,tuple):
-			for xx in flatten(x):
-				yield xx
-		else:
-			yield x
 
-def plot_periodicity(start_density,stop_density,specific_counts,output_prefix,left_length,right_length):
+def plot_periodicity(start_density,stop_density,specific_counts,output_prefix):
 	''' Part scripts adapted from RiboCode'''
 	start_density=pd.DataFrame(start_density)
 	stop_density=pd.DataFrame(stop_density)
@@ -106,10 +109,14 @@ def plot_periodicity(start_density,stop_density,specific_counts,output_prefix,le
 	return None
 
 
-def main():
+def parse_args():
 	parsed=create_parser_for_periodicity()
 	(options,args)=parsed.parse_args()
 	## calculate density for each bam files
+	if not options.annot_dir:
+		raise IOError("Please run RiboCode::prepare_transcripts first")
+	else:
+		gene_dict,transcript_dict = load_transcripts_pickle(os.path.join(options.annot_dir,"transcripts.pickle"))
 	selectTrans,transLengthDict,startCodonCoorDict,stopCodonCoorDict,transID2geneID,transID2geneName,cdsLengthDict=reload_transcripts_information(options.coorFile)
 	geneID2transID={v:k for k,v in transID2geneID.items()}
 	geneName2transID={v:k for k,v in transID2geneName.items()}
@@ -135,10 +142,10 @@ def main():
 		select_trans=selectTrans
 	print("There are "+str(len(select_trans))+" transcripts with both start and stop codon will be used for following analysis.",file=sys.stderr)
 	print("Start calculating read density...",file=sys.stderr)
-	start_density,stop_density,total_reads,specific_counts=periodicity(options.bamFile,select_trans,transLengthDict,startCodonCoorDict,stopCodonCoorDict,options.left_length,options.right_length)
-	plot_periodicity(start_density,stop_density,specific_counts,options.output_prefix,options.left_length,options.right_length)
+	start_density,stop_density,total_reads,specific_counts=periodicity(options.bamFile,select_trans,transcript_dict,options.left_length,options.right_length)
+	plot_periodicity(start_density,stop_density,specific_counts,options.output_prefix)
 	print("Finish the step of plot periodicity",file=sys.stderr)
 
 
 if __name__=="__main__":
-	main()
+	parse_args()
