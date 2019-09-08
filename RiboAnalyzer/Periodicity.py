@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-15 21:29:12
 @LastEditors: Li Fajin
-@LastEditTime: 2019-09-08 22:04:39
+@LastEditTime: 2019-09-08 22:26:55
 @Description: This script is used for checking periodicity of ribosome profiling data, but without P-site identification.
 And the part code are adapted from RiboCode our lab developed before. [Xiao, et al. NAR.2018]
 usage: python Periodicity -i bam -c longest.trans.info.txt -o outprefix -L 25 -R 35 --id-type transcript-id
@@ -109,7 +109,7 @@ def plot_periodicity(start_density,stop_density,specific_counts,output_prefix):
 	return None
 
 
-def parse_args():
+def main():
 	parsed=create_parser_for_periodicity()
 	(options,args)=parsed.parse_args()
 	## calculate density for each bam files
@@ -148,4 +148,4 @@ def parse_args():
 
 
 if __name__=="__main__":
-	parse_args()
+	main()
