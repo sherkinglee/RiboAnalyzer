@@ -7,7 +7,7 @@
 + [**Dependencies**](#dependencies)
 + [**Installation**](#installation)
 + [**Usage**](#usage)
-    + [**Data preparation**](#data-preparation)
+    + [**Data preparation (DP)**](#data-preparation-dp)
     + [**Quality Control (QC)**](#quality-control-qc)
     + [**Metagene Analysis (MA)**](#metagene-analysis-ma)
     + [**Feature Analysis (FA)**](#feature-analysis-fa)
@@ -17,7 +17,9 @@
 
 ---
 # **Introduction**
-The **RiboAnalyzer** is a python package used for downstream analysis of ribosome profiling data. This package has four function parts:
+The **RiboAnalyzer** is a python package used for downstream analysis of ribosome profiling data. This package has Five function parts:
+
++ **Data Preparation (DP)**: Data preparation for downstream analysis, containing some annotation files and sequences files.
 
 + **Quality Control (QC)**: Quality control for ribosome profiling data, containing periodicity checking, reads distribution among different reading frames,length distribution of ribosome footprints and DNA contaminations.
 + **Metagene Analysis (MA)**: Metagene analysis among different samples to find possible ribosome stalling events.
@@ -51,23 +53,17 @@ pip install RiboAnalyzer
 ```
 + Install from source:
 
-    + source from [github](https://github.com/sherkinglee/RiboAnalyzer)
-    ```
-    git clone https://github.com/sherkinglee/RiboAnalyzer.git
-    cd RiboAnalyzer
-    python setup.py install
-    ```
+```
+git clone https://github.com/sherkinglee/RiboAnalyzer.git
+cd RiboAnalyzer
+python setup.py install
+```
 
-    + source from [pypi](https://pypi.org/project/RiboAnalyzer/)
-    ```
-    wget -c https://files.pythonhosted.org/packages/2f/65/3b1aa0cf11238e2185ef3a17cd32a858db5dc5374d030fa91240d56f9f8f/RiboAnalyzer-0.1.tar.gz
-    cd RiboAnalyzer-0.1
-    python setup.py install
-    ```
+
 
 # **Usage**
 
-## **Data preparation**
+## **Data preparation (DP)**
 
 The analysis based on this package need some transcript sequences and annotation file. Before starting the analysis, we need to prepare those files ahead of time. However, the basic annotation file such genome FASTA file, GTF file for annotation which may be used for mapping need to be downloaded by user themselves.
 

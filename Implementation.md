@@ -15,6 +15,7 @@
     + [**Quality control**](#quality-control-1)
     + [**Reads mapping**](#reads-mapping)
 + [**RiboAnalyzer**](#riboanalyzer)
+    + [**Data preparation (DP)**](#data-preparation-dp)
     + [**Quality Control (QC)**](#quality-control-qc)
     + [**Metagene Analysis**](#metagene-analysis)
     + [**Feature Analysis (FA)**](#feature-analysis-fa)
@@ -23,7 +24,9 @@
 ----
 <!-- /TOC -->
 # **Introduction**
-The **RiboAnalyzer** is a python package used for downstream analysis of ribosome profiling data. This package has four function parts:
+The **RiboAnalyzer** is a python package used for downstream analysis of ribosome profiling data. This package has Five function parts:
+
++ **Data Preparation (DP)**: Data preparation for downstream analysis, containing some annotation files and sequences files.
 
 + **Quality Control (QC)**: Quality control for ribosome profiling data, containing periodicity checking, reads distribution among different reading frames,length distribution of ribosome footprints and DNA contaminations.
 + **Metagene Analysis (MA)**: Metagene analysis among different samples to find possible ribosome stalling events.
@@ -32,7 +35,7 @@ The **RiboAnalyzer** is a python package used for downstream analysis of ribosom
 
 In this file, we will show you how to use our **RiboAnalyzer** based on some published datasets.
 
-# **Data preparation**
+# **Data preparation (DP)**
 
 ## **Datasets download**
 
@@ -138,7 +141,7 @@ workdir=/Share2/home/lifj/Projects/03.RiboAnalyzer/2017_eIF5A/08.periodicity
 bamFiles=/Share2/home/lifj/Projects/03.RiboAnalyzer/2017_eIF5A/07.STAR
 Ref=/Share2/home/lifj/Reference/yeast/saccharomyces
 for i in  SRR5008135  SRR5008136  SRR5008137  SRR5008134;do
-    Periodicity -i $bamFiles/${i}_STAR/$i.Aligned.toTranscriptome.out.sorted.bam -a $Ref/RiboCode/RiboCode_annotate -o $workdir/$i -c $Ref/longest.transcripts.info.txt -L 25 -R 35
+    Periodicity -i $bamFiles/${i}_STAR/$i.Aligned.toTranscriptome.out.sorted.bam -o $workdir/$i -c $Ref/longest.transcripts.info.txt -L 25 -R 35
 done
 ```
 *metaplots* from [RiboCode](https://github.com/xryanglab/RiboCode) is used for 3-nt periodicity checking, and it will output a *pdf* file for plotting of distribution of reads with different length. However, it can not output the density of reads with different length which could not meet some specific analysis requirements. Therefore, we developed *Periodicity* to do the same thing as *metaplots* did but without P-site identification [(Figure 1A)][1]. And it could generate files used for periodicity plot as well as periodicity plot itself. In addition, *Periodicity* could also generate distribution plot of all reads rather than reads with a specific length [(Figure 1A)][2].
@@ -425,13 +428,14 @@ EnrichmentAnalysisForSingleTrans -i all_codon_ratio.txt.txt -s ARC1 -o ARC1 -c <
 **Figure 6: The results of Enrichment Analysis**. **A.** Engagement of nascent ARC1 (top), GUS1 (bottom) by C-terminally tagged MetRS.  **B.** Engagement of nascent ARC1 (top), MES1 (bottom) by C-terminally tagged GluRS.
 
 
-  [1]: http://static.zybuluo.com/sherking/qf9bz5uq9f3tduije2vnezy2/QC.png
-  [2]: http://static.zybuluo.com/sherking/qf9bz5uq9f3tduije2vnezy2/QC.png
-  [3]: http://static.zybuluo.com/sherking/qf9bz5uq9f3tduije2vnezy2/QC.png
-  [4]: http://static.zybuluo.com/sherking/qf9bz5uq9f3tduije2vnezy2/QC.png
-  [5]: http://static.zybuluo.com/sherking/qf9bz5uq9f3tduije2vnezy2/QC.png
-  [6]: http://static.zybuluo.com/sherking/qf9bz5uq9f3tduije2vnezy2/QC.png
-  [7]: http://static.zybuluo.com/sherking/qf9bz5uq9f3tduije2vnezy2/QC.png
+
+  [1]: http://static.zybuluo.com/sherking/ssfeigc28n30ayi4q2owo35e/QC.png
+  [2]: http://static.zybuluo.com/sherking/ssfeigc28n30ayi4q2owo35e/QC.png
+  [3]: http://static.zybuluo.com/sherking/ssfeigc28n30ayi4q2owo35e/QC.png
+  [4]: http://static.zybuluo.com/sherking/ssfeigc28n30ayi4q2owo35e/QC.png
+  [5]: http://static.zybuluo.com/sherking/ssfeigc28n30ayi4q2owo35e/QC.png
+  [6]: http://static.zybuluo.com/sherking/ssfeigc28n30ayi4q2owo35e/QC.png
+  [7]: http://static.zybuluo.com/sherking/ssfeigc28n30ayi4q2owo35e/QC.png
   [8]: http://static.zybuluo.com/sherking/2pi6e3rq2sr052lqbqxjs3so/MA.png
   [9]: http://static.zybuluo.com/sherking/2pi6e3rq2sr052lqbqxjs3so/MA.png
   [10]: http://static.zybuluo.com/sherking/2pi6e3rq2sr052lqbqxjs3so/MA.png
