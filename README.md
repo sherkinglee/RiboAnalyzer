@@ -17,9 +17,8 @@
 
 ---
 # **Introduction**
-The **RiboAnalyzer** is a python package used for downstream analysis of ribosome profiling data. This package has Five function parts:
+The **RiboAnalyzer** is a python package used for downstream analysis of ribosome profiling data. This package has four function parts:
 
-+ **Data Preparation (DP)**: Data preparation for downstream analysis, containing some annotation files and sequences files.
 
 + **Quality Control (QC)**: Quality control for ribosome profiling data, containing periodicity checking, reads distribution among different reading frames,length distribution of ribosome footprints and DNA contaminations.
 + **Metagene Analysis (MA)**: Metagene analysis among different samples to find possible ribosome stalling events.

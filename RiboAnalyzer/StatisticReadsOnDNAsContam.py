@@ -4,7 +4,7 @@
 @Author: Li Fajin
 @Date: 2019-08-22 16:58:19
 @LastEditors: Li Fajin
-@LastEditTime: 2019-08-30 16:47:12
+@LastEditTime: 2019-09-17 15:48:56
 @Description: This script is used for statistic reads mapped to DNA  based on bam files mapped to transcriptome.
 Becaused the reads mapped to DNA may be contaminations. Code part from Xiao Zhengzao.
 '''
@@ -99,9 +99,9 @@ def statistic_mapped_reads(bamFile,gtfFile,id_type,feature_type,output_prefix):
 				uniqueAmbiguous+=1
 				RNA_len[len(r.read.seq)]+=1
 	with open(output_prefix+"_reads_distribution.txt",'w') as f:
-		f.write("unique mapped reads of RNA: %i\n" % uniqueGene)
-		f.write("unique mapped reads of DNA: %i\n" % uniqueNotGene)
-		f.write("unique mapped reads of Intron: %i\n" % uniqueIntron)
+		f.write("unique mapped reads of exon: %i\n" % uniqueGene)
+		f.write("unique mapped reads of intergenic region: %i\n" % uniqueNotGene)
+		f.write("unique mapped reads of intron: %i\n" % uniqueIntron)
 		f.write("unique mapped ambiguous reads of RNA: %i\n" % uniqueAmbiguous)
 	return DNA_len,RNA_len,Intron_len
 
