@@ -4,10 +4,10 @@
 @Author: Li Fajin
 @Date: 2019-08-15 21:29:12
 @LastEditors: Li Fajin
-@LastEditTime: 2019-09-08 22:26:55
+@LastEditTime: 2019-09-18 20:38:23
 @Description: This script is used for checking periodicity of ribosome profiling data, but without P-site identification.
 And the part code are adapted from RiboCode our lab developed before. [Xiao, et al. NAR.2018]
-usage: python Periodicity -i bam -c longest.trans.info.txt -o outprefix -L 25 -R 35 --id-type transcript-id
+usage: python Periodicity -i bam -a RiboCode_annote -c longest.trans.info.txt -o outprefix -L 25 -R 35 --id-type transcript-id
 '''
 
 
@@ -18,6 +18,7 @@ from collections import defaultdict
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import seaborn as sns
 from matplotlib.backends.backend_pdf import PdfPages
 from optparse import OptionParser
 
@@ -62,52 +63,74 @@ def periodicity(in_bamFile,in_selectTrans,transcript_dict,left_length,right_leng
 	print("There are " + str(i)+" used for statistics.",file=sys.stderr)
 	return start_density,stop_density,total_reads,specific_counts
 
-
-def plot_periodicity(start_density,stop_density,specific_counts,output_prefix):
-	''' Part scripts adapted from RiboCode'''
+def plot_periodicity_start_codon(start_density,specific_counts,output_prefix):
 	start_density=pd.DataFrame(start_density)
-	stop_density=pd.DataFrame(stop_density)
 	start_density=start_density.reindex(columns=sorted(start_density.columns))
-	stop_density=stop_density.reindex(columns=sorted(stop_density.columns))
 	start_density['sum']=start_density.apply(sum,axis=1)
-	stop_density['sum']=stop_density.apply(sum,axis=1)
 	start_density.loc['sum']=np.array([specific_counts[key] for key in start_density.columns])
-	stop_density.loc['sum']=np.array([specific_counts[key] for key in stop_density.columns])
 	start_density.to_csv(output_prefix+"_from_start_codon.txt",index=0,sep="\t")
-	stop_density.to_csv(output_prefix+"_from_stop_codon.txt",index=0,sep="\t")
-	with PdfPages(output_prefix + "_periodicity.pdf") as pdf:
+	text_font={"size":15,"family":"Arial","weight":"bold"}
+	plt.rc('font',weight='bold')
+	with PdfPages(output_prefix + "_start_periodicity.pdf") as pdf:
 		x = np.arange(-50,51,dtype=int)
-		colors = np.tile(["b","g","r"], 34)
+		colors = sns.color_palette('husl',3)*34
 		for L in start_density.columns:
 			xticks=[-40,-20,0,20,40]
 			perct = '{:.2%}'.format(specific_counts[L] / specific_counts['sum'])
-			fig,(ax1,ax2) = plt.subplots(nrows=2,ncols=1)
+			fig,ax1 = plt.subplots(figsize=(5.6,2.8))
 			y1=start_density.loc[:,L]
-			y2=stop_density.loc[:,L]
-			ax1.vlines(x,ymin=np.zeros(101),ymax=y1,colors=colors[:-1])
+			ax1.vlines(x,ymin=np.zeros(101),ymax=y1,colors=colors[:-1],linewidth=2)
 			ax1.tick_params(axis='x',which="both",top=False,direction='out')
 			ax1.set_xticks(xticks)
 			ax1.set_xlim((-50,50))
-			ax1.set_xlabel("Distance (nt)")
-			ax1.set_ylabel("Alignments")
+			ax1.spines["top"].set_visible(False)
+			ax1.spines["right"].set_visible(False)
+			ax1.spines["bottom"].set_linewidth(2)
+			ax1.spines["left"].set_linewidth(2)
+			ax1.set_xlabel("Distance from start codon (nt)",fontdict=text_font)
+			ax1.set_ylabel("Alignments",fontdict=text_font)
 			if not L == 'sum':
-				ax1.set_title("({} nt reads,proportion:{})".format(L,perct) + "\n Distance 5'- start codons")
+				ax1.set_title("{} nt reads,proportion:{}".format(L,perct),fontdict=text_font)
 			else:
-				ax1.set_title("Total reads, proporation:{}".format(perct) +"\n Distance 5'- start codons")
-			ax2.vlines(x,ymin=np.zeros(101),ymax=y2,colors=colors[:-1])
-			ax2.tick_params(axis='x',which="both",top=False,direction='out')
-			ax2.set_xticks(xticks)
-			ax2.set_xlim((-50,50))
-			ax2.set_xlabel("Distance (nt)")
-			ax2.set_ylabel("Alignments")
-			ax2.set_title("Distance 5'- stop codons")
-
+				ax1.set_title("Total reads, proporation:{}".format(perct),fontdict=text_font)
 			fig.tight_layout()
 			pdf.savefig(fig)
 			plt.close()
-
 	return None
-
+def plot_periodicity_stop_codon(stop_density,specific_counts,output_prefix):
+	stop_density=pd.DataFrame(stop_density)
+	stop_density=stop_density.reindex(columns=sorted(stop_density.columns))
+	stop_density['sum']=stop_density.apply(sum,axis=1)
+	stop_density.loc['sum']=np.array([specific_counts[key] for key in stop_density.columns])
+	stop_density.to_csv(output_prefix+"_from_stop_codon.txt",index=0,sep="\t")
+	text_font={"size":15,"family":"Arial","weight":"bold"}
+	plt.rc('font',weight='bold')
+	with PdfPages(output_prefix + "_stop_periodicity.pdf") as pdf:
+		x = np.arange(-50,51,dtype=int)
+		colors = sns.color_palette('husl',3)*34
+		for L in stop_density.columns:
+			xticks=[-40,-20,0,20,40]
+			perct = '{:.2%}'.format(specific_counts[L] / specific_counts['sum'])
+			fig,ax1 = plt.subplots(figsize=(5.6,2.8))
+			y1=stop_density.loc[:,L]
+			ax1.vlines(x,ymin=np.zeros(101),ymax=y1,colors=colors[:-1],linewidth=2)
+			ax1.tick_params(axis='x',which="both",top=False,direction='out')
+			ax1.set_xticks(xticks)
+			ax1.set_xlim((-50,50))
+			ax1.spines["top"].set_visible(False)
+			ax1.spines["right"].set_visible(False)
+			ax1.spines["bottom"].set_linewidth(2)
+			ax1.spines["left"].set_linewidth(2)
+			ax1.set_xlabel("Distance from stop codon (nt)",fontdict=text_font)
+			ax1.set_ylabel("Alignments",fontdict=text_font)
+			if not L == 'sum':
+				ax1.set_title("{} nt reads,proportion:{}".format(L,perct),fontdict=text_font)
+			else:
+				ax1.set_title("Total reads, proporation:{}".format(perct),fontdict=text_font)
+			fig.tight_layout()
+			pdf.savefig(fig)
+			plt.close()
+	return None
 
 def main():
 	parsed=create_parser_for_periodicity()
@@ -143,7 +166,8 @@ def main():
 	print("There are "+str(len(select_trans))+" transcripts with both start and stop codon will be used for following analysis.",file=sys.stderr)
 	print("Start calculating read density...",file=sys.stderr)
 	start_density,stop_density,total_reads,specific_counts=periodicity(options.bamFile,select_trans,transcript_dict,options.left_length,options.right_length)
-	plot_periodicity(start_density,stop_density,specific_counts,options.output_prefix)
+	plot_periodicity_start_codon(start_density,specific_counts,options.output_prefix)
+	plot_periodicity_stop_codon(stop_density,specific_counts,options.output_prefix)
 	print("Finish the step of plot periodicity",file=sys.stderr)
 
 
