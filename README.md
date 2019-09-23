@@ -148,10 +148,10 @@ StatisticReadsOnDNAsContam -i  <genome.bam>  -g <gtfFile.gtf>  -o  <output_prefi
 ```
 where *genome.bam* is bam file mapped to genome, *gtfFile.gtf* is the genome annotation file such as *Homo_sapiens.GRCh38.88.gtf*. This step would generated four files, one is the reads distribution of mapped reads <*output_prefix_reads_distribution.txt*>, like this:
 ```
-unique mapped reads of RNA: 30776678
-unique mapped reads of DNA: 48395
-unique mapped reads of Intron: 585
-unique mapped ambiguous reads of RNA: 183500
+unique mapped reads of exon: 16161306
+unique mapped reads of intergenic region: 36937
+unique mapped reads of intron: 345
+unique mapped ambiguous reads of RNA: 119989
 ```
 The other three are *pdf* files, which are length distribution plot of reads mapped to RNA, DNA, and Intron.  Notes: this step would consume a lot of time, aroumd 10~20 minutes.
 
@@ -198,7 +198,7 @@ This step would generate four kind of files. One is *output_prefix_metagenePlot.
 ```
 PlotMetageneAnalysis -i <output_prefix_dataframe.txt> -o <output_prefix> -g <group1,group2> -r <group1-rep1,group2-rep2__group2-rep1,group2-rep2> -u 0 -d 500 -U codon {--format --ymin --ymax --slide-window --axvline --start --window --step --CI}
 ```
-where *-u* ,*-d* and *-U* must be corresponding to *MetageneAnalysis*. And the *--slide-window*, *--start*, and *--window* controls whether to smooth the line with a slide-window average method.
+where *-u* ,*-d* and *-U* must be corresponding to *MetageneAnalysis*. And the *--slide-window*, *--start* and *--window* controls whether to smooth the line with a slide-window average method.
 
 + **Metagene analysis on UTR regions.**
 
@@ -209,7 +209,7 @@ The output of this step is the same as what you did on **Metagene analysis on CD
 
 + **Polarity calculation.**
 
-Polarity values is usually used for juding the ribosome density enriched on 5 splice of ORFs or 3 splice of ORFs. Values colse to -1, indicating ribosomes enriched more on 3' ORFs and values close to 1, indicating ribosomes enriched more on 5' ORFs.
+Polarity values is usually used for juding the ribosome density enriched on 5' end of ORFs or 3' end of ORFs. Values colse to -1, indicating ribosomes enriched more on 3' ORFs and values close to 1, indicating ribosomes enriched more on 5' ORFs.
 ```
 PolarityCalculation -f <attributes.txt> -c <longest.transcripts.info.txt> -o <output_prefix> -n 64
 ```
@@ -222,7 +222,7 @@ PlotPolarity -i <output_prefix_polarity_dataframe.txt> -o output_prefix -g <grou
 This would generate two plot files. One is the distribution plot of polarity for all samples. And the other is the distribution plot of mean polarity among different replicates.
 
 ## **Feature Analysis (FA)**
-The feature analysis involves some factors which may influence the translation elongation rate, containing tRNA adaptation index (tAI), codon adaptation index (CAI), hydrophobicity of amino acid  in new piptide chain, charges of amino acids, poly-Prolin motifs, et al.
+The feature analysis involves some factors which may influence the translation elongation rate, containing tRNA adaptation index (tAI), codon adaptation index (CAI), hydrophobicity of amino acid  in new piptide chain, charges of amino acids, poly-Proline motifs, et al.
 
 + **Pick out transcripts enriched ribosomes on specific region.**
 

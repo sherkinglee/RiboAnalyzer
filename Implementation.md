@@ -140,7 +140,7 @@ workdir=/Share2/home/lifj/Projects/03.RiboAnalyzer/2017_eIF5A/08.periodicity
 bamFiles=/Share2/home/lifj/Projects/03.RiboAnalyzer/2017_eIF5A/07.STAR
 Ref=/Share2/home/lifj/Reference/yeast/saccharomyces
 for i in  SRR5008135  SRR5008136  SRR5008137  SRR5008134;do
-    Periodicity -i $bamFiles/${i}_STAR/$i.Aligned.toTranscriptome.out.sorted.bam -o $workdir/$i -c $Ref/longest.transcripts.info.txt -L 25 -R 35
+    Periodicity -i $bamFiles/${i}_STAR/$i.Aligned.toTranscriptome.out.sorted.bam -a $Ref/RiboCode/RiboCode_annotate_extend -o $workdir/$i -c $Ref/longest.transcripts.info.txt -L 25 -R 35
 done
 ```
 *metaplots* from [RiboCode](https://github.com/xryanglab/RiboCode) is used for 3-nt periodicity checking, and it will output a *pdf* file for plotting of distribution of reads with different length. However, it can not output the density of reads with different length which could not meet some specific analysis requirements. Therefore, we developed *Periodicity* to do the same thing as *metaplots* did but without P-site identification [(Figure 1A)][1]. And it could generate files used for periodicity plot as well as periodicity plot itself. In addition, *Periodicity* could also generate distribution plot of all reads rather than reads with a specific length [(Figure 1A)][2].
