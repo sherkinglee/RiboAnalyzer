@@ -1,4 +1,4 @@
-﻿# **RiboAnalyzer**
+﻿# **RiboAnalyzer has been deprecated!!! Please refer to [RiboMiner](https://github.com/xryanglab/RiboMiner)**
 
 <!-- TOC -->
 
